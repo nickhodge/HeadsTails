@@ -1,0 +1,106 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="HeadsTails_WP8.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:common="clr-namespace:HeadsTails.Common"
+    mc:Ignorable="d"
+    xmlns:my="clr-namespace:Microsoft.Live.Controls;assembly=Microsoft.Live.Controls"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="False">
+    <phone:PhoneApplicationPage.Resources>
+        <common:BoolToStringConverter x:Key="BoolToWinConverter" FalseValue="Lose" TrueValue="Win"/>
+        <common:BoolToVisibilityConverter x:Key="LoggingIn" FalseValue="Visible" TrueValue="Collapsed"/>
+        <common:BoolToVisibilityConverter x:Key="LoggedIn" FalseValue="Collapsed" TrueValue="Visible"/>
+        <common:BoolToVisibilityConverter x:Key="EditingGroup" FalseValue="Collapsed" TrueValue="Visible"/>
+        <common:BoolToVisibilityConverter x:Key="DisplayingGroup" FalseValue="Visible" TrueValue="Collapsed"/>
+        <CollectionViewSource x:Key="resultsList" Source="{Binding headsTailsModel.userWinningTableSorted}"/>
+        <CollectionViewSource x:Key="groupResultsList" Source="{Binding headsTailsUserDetailsModel.groupLeaderboardResults}"/>
+    </phone:PhoneApplicationPage.Resources>
+
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="64"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <!--Pivot Control-->
+        <phone:Pivot Grid.Row="0" Title="Heads Tails">
+            <!--Pivot item one-->
+            <phone:PivotItem Header="flip!">
+                <StackPanel>
+                    <TextBlock Grid.Column="2" Grid.Row="0" x:Name="thisFlipResult"  Text="{Binding headsTailsModel.LatestResult}"  Width="300" Height="60"></TextBlock>
+                    <Button Visibility="{Binding headsTailsUserDetailsModel.CurrentlyLoggedIn, Converter={StaticResource LoggedIn}}" HorizontalAlignment="Right" Margin="0,0,20,0" Grid.Column="2" Grid.Row="1" x:Name="pickHeads" Width="300" Height="100" Click="PickHeads">Heads</Button>
+                    <Button Visibility="{Binding headsTailsUserDetailsModel.CurrentlyLoggedIn, Converter={StaticResource LoggedIn}}" HorizontalAlignment="Left" Margin="0,0,20,0" Grid.Column="2" Grid.Row="2" x:Name="pickTails" Width="300" Height="100" Click="PickTails">Tails</Button>
+                </StackPanel>
+            </phone:PivotItem>
+
+            <!--Pivot item two-->
+            <phone:PivotItem DataContext="{Binding headsTailsModel}" Header="history">
+                <!--Double line list no text wrapping-->
+                <phone:LongListSelector LayoutMode="List" IsGroupingEnabled="False" Margin="0,0,-12,0" ItemsSource="{Binding userWinningTableSorted}">
+                    <phone:LongListSelector.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding}" Margin="12,0,0,0" Style="{StaticResource PhoneTextExtraLargeStyle}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                </phone:LongListSelector>
+            </phone:PivotItem>
+
+            <!--Pivot item three-->
+            <phone:PivotItem DataContext="{Binding headsTailsUserDetailsModel}" Header="leaderboard">
+                <!--Double line list no text wrapping-->
+                <phone:LongListSelector Margin="0,0,-12,0" ItemsSource="{Binding groupLeaderboardResults}">
+                    <phone:LongListSelector.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Margin="10,0,0,0"  Text="{Binding}"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </phone:LongListSelector.ItemTemplate>
+                </phone:LongListSelector>
+            </phone:PivotItem>
+        </phone:Pivot>
+
+        <StackPanel DataContext="{Binding headsTailsUserDetailsModel}" Grid.Row="1" Orientation="Horizontal" >
+            <my:SignInButton Name="btnSignin"
+                             Visibility="{Binding CurrentlyLoggedIn, Converter={StaticResource LoggingIn}}"
+                             ClientId="00000000400EBB1E" 
+                             Scopes="wl.signin wl.basic" 
+                             TextType="SignIn"  
+                             SessionChanged="btnSignin_SessionChanged" 
+                             HorizontalAlignment="Left"  
+                             VerticalAlignment="Top" />
+
+            <TextBlock VerticalAlignment="Center" Text="{Binding CurrentLoginStatus}"></TextBlock>
+            <StackPanel Orientation="Horizontal" Visibility="{Binding CurrentlyLoggedIn, Converter={StaticResource LoggedIn}}">
+                <TextBlock Margin="5,0,0,0" VerticalAlignment="Center">
+                    <Run Text="{Binding userName}"></Run>
+                    <Run>Group:</Run>
+                    <Run Text="{Binding groupName}"></Run>
+                    <Run>High Score:</Run>
+                    <Run Text="{Binding highScore}"></Run>
+                </TextBlock>
+            </StackPanel>
+        </StackPanel>
+        
+        <!--Uncomment to see an alignment grid to help ensure your controls are
+            aligned on common boundaries.  The image has a top margin of -32px to
+            account for the System Tray. Set this to 0 (or remove the margin altogether)
+            if the System Tray is hidden.
+
+            Before shipping remove this XAML and the image itself.-->
+        <!--<Image Source="/Assets/AlignmentGrid.png" VerticalAlignment="Top" Height="800" Width="480" Margin="0,-32,0,0" Grid.Row="0" IsHitTestVisible="False" />-->
+    </Grid>
+
+</phone:PhoneApplicationPage>
