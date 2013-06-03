@@ -107,11 +107,13 @@
     
 	document.addEventListener("deviceready", onDeviceReady, false);
 
-    function onDeviceReady() {
+	function onDeviceReady() {
+	    
         refreshAuthDisplay();
         $('#summary').html('<strong>You must login to access data.</strong>');
         $("#logged-out button").click(logIn);
         $("#logged-in button").click(logOut);
+        refreshLeaderboard();
     }
 
 });

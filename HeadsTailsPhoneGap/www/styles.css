@@ -14,14 +14,15 @@ header h1 { text-transform: uppercase; font-weight: normal; color: white; font-s
 header h2 { text-transform: uppercase; font-weight: normal; color: white; font-size: 20px; }
 
 
-#leaderboard-items {background-color: #71BCFA;}
+#leaderboard-items {background-color: #71BCFA; font-size: 16px;}
 
 /* List of items */
 #leaderboard-items li { list-style-type: none; height: 36px; padding: 0px 5px; border-bottom: 1px solid #dadada;  }
 
 /* Textboxes in list of items */
-#leaderboard-items li div { overflow: hidden; padding: 5px 2px; }
+#leaderboard-items li div {  overflow: hidden; padding: 5px 2px; }
 .item-text { width: 100%; height: 26px; line-height: 24px; border: 1px solid transparent; background-color: transparent; }
+    
 
 #logged-out {padding:20px; }
 #logged-in {padding:20px; }
