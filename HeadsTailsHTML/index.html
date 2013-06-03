@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>HeadsTails</title>
+        <link rel='stylesheet' href='styles.css' />
+    </head>
+    <body>
+        <div id='wrapper'>
+            <article>
+                <header>
+                    <h1>Heads Tails HTML</h1>
+                    <h2>Using Windows Azure Mobile Services</h2>
+                </header>
+
+				<div id="logged-in">You are logged in as <span id="login-name"></span>.<button id="log-out">Log out</button>
+					
+					<form id="form-username"><input id="newusername"></input><div class="fakebutton" id="saveusername" style="width: 100px;">Save User Name</div></form>
+					
+					<div id="game">
+						<div id=>Current In-a-Row <span id="current-in-a-row">0</span></div>
+						<div id=>Highest In-a-Row <span id="highest-in-a-row">0</span></div>
+						
+						<div class='fakebutton' id='chooseheads'>Pick Heads</div>
+						<div class='fakebutton' id='choosetails'>Pick Tails</div>
+					</div>
+					
+					<ul id='leaderboard-items'></ul>
+					<div class='fakebutton' id='leaderboard-refresh'>Refresh</div>
+					<p id='summary'>Loading...</p>
+				
+				</div>
+				
+				<div id="logged-out">You are not logged in.<button>Log in</button></div>
+				
+            </article>
+
+        </div>
+
+        <script src='js/jquery-1.9.1.min.js'></script>
+        <script src='js/MobileServices.Web-1.0.0.min.js'></script>
+        <script src='app.js'></script>
+    </body>
+</html>
