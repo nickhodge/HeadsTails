@@ -45,7 +45,20 @@
                           Navigating="CordovaBrowser_Navigating" 
                           NavigationFailed="CordovaBrowser_NavigationFailed" 
                           IsGeolocationEnabled="True">
-        </phone:WebBrowser>        
+            <phone:WebBrowser.Projection>
+                <PlaneProjection x:Name="BrowserProjector" CenterOfRotationX="0" RotationY="-180"/>
+            </phone:WebBrowser.Projection>
+            <phone:WebBrowser.Resources>
+                <Storyboard x:Name="RotateIn" BeginTime="0:0:0.5">
+                    <DoubleAnimation
+                        Storyboard.TargetName="BrowserProjector"
+                        Storyboard.TargetProperty="RotationY"
+                        To="0" Duration="0:0:0.6"/>
+                </Storyboard>
+            </phone:WebBrowser.Resources>
+
+        </phone:WebBrowser>
+        
     </Grid>
 </UserControl>
 

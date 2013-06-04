@@ -399,7 +399,7 @@ namespace WPCordovaClassLib
             if (this.CordovaBrowser.Opacity < 1)
             {
                 this.CordovaBrowser.Opacity = 1;
-                //RotateIn.Begin();
+                RotateIn.Begin();
             }
         }
 
