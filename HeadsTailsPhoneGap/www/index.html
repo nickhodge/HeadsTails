@@ -3,7 +3,6 @@
     <head>
         <title>HeadsTails</title>
         <link rel='stylesheet' href='styles.css' />
-        <meta name='viewport' content='width=device-width' />
     </head>
     <body>
         <div id='wrapper'>
@@ -15,11 +14,11 @@
 
 				<div id="logged-in">You are logged in as <span id="login-name"></span>.<button id="log-out">Log out</button>
 					
-					<form id="form-username"><input id="newusername" /><div class="fakebutton" id="saveusername" style="width: 200px;">Save User Name</div></form>
+					<form id="form-username"><input id="newusername"></input><div class="fakebutton" id="saveusername" style="width: 100px;">Save User Name</div></form>
 					
 					<div id="game">
-						<div>Current In-a-Row <span id="current-in-a-row">0</span></div>
-						<div>Highest In-a-Row <span id="highest-in-a-row">0</span></div>
+						<div id=>Current In-a-Row <span id="current-in-a-row">0</span></div>
+						<div id=Div1>Highest In-a-Row <span id="highest-in-a-row">0</span></div>
 						
 						<div class='fakebutton' id='chooseheads'>Pick Heads</div>
 						<div class='fakebutton' id='choosetails'>Pick Tails</div>
@@ -28,19 +27,19 @@
 				
 				</div>
 				
-                <div id="logged-out">You are not logged in.<button>Log in</button></div>
+				<div id="logged-out">You are not logged in.<button>Log in</button></div>
 
 				<ul id='leaderboard-items'></ul>
 				<div class='fakebutton' id='leaderboard-refresh'>Refresh</div>
 				<p id='summary'>Loading...</p>
+
 				
             </article>
 
         </div>
-        <!-- ref: http://blogs.msdn.com/b/jpsanders/archive/2013/04/17/phonegap-and-windows-azure-mobile-services-error-login-is-only-supported-from-http-and-https-urls-please-host-your-page-in-a-web-server.aspx -->
-        <script src='js/jquery-1.9.1.min.js'></script>
+        <script src="cordova-2.7.0.js"></script>
+        <script src='Scripts/jquery-2.0.1.min.js'></script>
         <script src='js/MobileServices.Web-1.0.0.min.js'></script>
-        <script src='cordova-2.7.0.js'></script>
         <script src='app.js'></script>
     </body>
 </html>

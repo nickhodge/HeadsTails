@@ -46,6 +46,8 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <BackgroundAgentType />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -173,10 +175,22 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="www\**" />
+    <Content Include="..\HeadsTailsHTML\js\MobileServices.Web-1.0.0.min.js">
+      <Link>www\js\MobileServices.Web-1.0.0.min.js</Link>
+    </Content>
+    <Content Include="www\index.html" />
+    <Content Include="www\Scripts\jquery-2.0.1-vsdoc.js" />
+    <Content Include="www\Scripts\jquery-2.0.1.js" />
+    <Content Include="www\Scripts\jquery-2.0.1.min.js" />
+    <Content Include="www\app.js" />
+    <Content Include="www\cordova-2.7.0.js" />
+    <Content Include="www\img\logo.png" />
+    <Content Include="www\styles.css" />
     <Content Include="config.xml" />
     <Content Include="Images\**" />
     <Content Include="resources\notification-beep.wav" />
+    <None Include="packages.config" />
+    <None Include="www\Scripts\jquery-2.0.1.min.map" />
     <None Include="VERSION" />
     <None Include="Properties\AppManifest.xml">
       <SubType>Designer</SubType>
@@ -204,6 +218,9 @@
     <Compile Include="Plugins\*" />
     <Compile Include="Plugins\UI\*.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="www\css\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -220,4 +237,5 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
 </Project>
