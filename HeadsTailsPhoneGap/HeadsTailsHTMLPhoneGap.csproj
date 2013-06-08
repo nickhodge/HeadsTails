@@ -175,8 +175,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\HeadsTailsHTML\js\MobileServices.Web-1.0.0.min.js">
-      <Link>www\js\MobileServices.Web-1.0.0.min.js</Link>
+    <Content Include="..\HeadsTailsHTML\Scripts\MobileServices.Web-1.0.0.min.js">
+      <Link>www\Scripts\MobileServices.Web-1.0.0.min.js</Link>
     </Content>
     <Content Include="www\index.html" />
     <Content Include="www\Scripts\jquery-2.0.1-vsdoc.js" />

@@ -61,7 +61,7 @@
   <ItemGroup>
     <Content Include="app.js" />
     <Content Include="index.html" />
-    <Content Include="js\MobileServices.Web-1.0.0.min.js" />
+    <Content Include="Scripts\MobileServices.Web-1.0.0.min.js" />
     <Content Include="packages.config" />
     <None Include="Scripts\jquery-2.0.1-vsdoc.js" />
     <Content Include="Scripts\jquery-2.0.1.js" />

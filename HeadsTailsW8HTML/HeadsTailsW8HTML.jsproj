@@ -55,9 +55,6 @@
     <AppxManifest Include="package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="..\HeadsTailsHTML\js\MobileServices.Web-1.0.0.min.js">
-      <Link>js\MobileServices.Web-1.0.0.min.js</Link>
-    </Content>
     <Content Include="..\HeadsTailsPhoneGap\www\app.js">
       <Link>app.js</Link>
     </Content>
@@ -80,6 +77,7 @@
     <Content Include="Scripts\jquery-2.0.1.js" />
     <Content Include="Scripts\jquery-2.0.1.min.js" />
     <Content Include="Scripts\jquery-2.0.1.min.map" />
+    <Content Include="Scripts\MobileServices.Web-1.0.0.min.js" />
     <None Include="HeadsTailsW8HTML_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -88,7 +86,6 @@
   <ItemGroup>
     <Folder Include="css\" />
     <Folder Include="img\" />
-    <Folder Include="js\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
