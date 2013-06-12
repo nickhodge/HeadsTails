@@ -1,114 +1,123 @@
 ﻿$(function () {
+
     var client = new WindowsAzure.MobileServiceClient('https://headstails.azure-mobile.net/', 'UmxHTxsGVDlkQUklKFQhxbOHvVWqRI32'),
-    leaderboardTable = client.getTable('leaderboard');
+        leaderboardTable = client.getTable('leaderboard');
 
-	var highestInARow = 0;	
-	var currentInARow = 0;
-	var groupName = "default";
-	var currentUserId = 0;
-	
-   function refreshLeaderboard() {
+    var headsTailsViewModel = {
+        highestInARow: ko.observable('0'),
+        currentInARow: ko.observable('0'),
+        groupName: ko.observable('default'),
+        currentUserId: ko.observable(),
+        userName: ko.observable(),
+        leaderBoard: ko.observableArray(),
+        newusername: ko.observable()
+    };
+
+    function refreshLeaderboard() {
         var query = leaderboardTable.orderByDescending('highscore');
-		 
-        query.read().then(function(leaderboard) {
-            var leaderboarditems = $.map(leaderboard, function(item) {
-                return $('<li>').html(item.username + '&nbsp;<em> Highscore: '+ item.highscore +'</em>');
+        headsTailsViewModel.leaderBoard.removeAll();
+        query.read().then(function (leaderboard) {
+            $.map(leaderboard, function (item) {
+                headsTailsViewModel.leaderBoard.push(item);
             });
-
-            $('#leaderboard-items').empty().append(leaderboarditems).toggle(leaderboarditems.length > 0);
-            $('#summary').html('<strong>' + leaderboarditems.length + '</strong> members in group <strong>' + groupName + '</strong>');
         });
     }
-	
-	function updateLeaderboard () {
-		leaderboardTable.update({id:1 , highscore: highestInARow, groupname: groupName}).then(refreshLeaderboard);
-	}
-	
-	// Game Mechanics, courtesy George Boole and Claude Shannon
-    $('#choosetails').submit(function(evt) {
+
+    function updateLeaderboard() {
+        leaderboardTable.update({
+            id: 1,
+            highscore: headsTailsViewModel.highestInARow(),
+            groupname: headsTailsViewModel.groupName()
+        }).then(refreshLeaderboard);
+    }
+
+    // Game Mechanics, courtesy George Boole and Claude Shannon
+    $('#choosetails').submit(function (evt) {
         chooseheads(false);
     });
-	
-    $('#chooseheads').click(function(evt) {
+
+    $('#chooseheads').click(function (evt) {
         chooseheads(true);
     });
-	
-	function chooseheads(flip) {
-		var x = Math.random();
-		if ((x < 0.5) && flip) {
-			currentInARow++;
-		} else {
-			currentInARow = 0;
-		}
-		$('#current-in-a-row').html(currentInARow);
-		if (currentInARow > highestInARow) {
-		//doupdate
-			highestInARow = currentInARow;
-			$('#highest-in-a-row').html(highestInARow);
-			updateLeaderboard();
-		}
-	}
 
-	
-	// Handle refresh leaderboard
-    $('#leaderboard-refresh').click(function(evt) {
+    function chooseheads(flip) {
+        var x = Math.random();
+        if ((x < 0.5) && flip) {
+            headsTailsViewModel.currentInARow(headsTailsViewModel.currentInARow() + 1);
+        } else {
+            headsTailsViewModel.currentInARow(0);
+        }
+        if (headsTailsViewModel.currentInARow() > headsTailsViewModel.highestInARow()) {
+            //doupdate
+            headsTailsViewModel.highestInARow(headsTailsViewModel.currentInARow());
+            updateLeaderboard();
+        }
+    }
+
+
+    // Handle refresh leaderboard
+    $('#leaderboard-refresh').click(function (evt) {
         refreshLeaderboard();
     });
-	
-	// Handle Update username
-	function updateUserName() {
-		var newUserName = $('input[id=newusername]').val();
-		leaderboardTable.update({id:currentUserId , highscore: highestInARow, groupname: groupName, username: newUserName }).then(function(updateduser)
-		{
-			$("#login-name").text(updateduser.username);
-			$("#form-username").toggle(false);
-			refreshLeaderboard();
-		});
-	}
 
-	// Handle Login/auth
-	function refreshAuthDisplay() {
-		var isLoggedIn = client.currentUser !== null;
-		$("#logged-in").toggle(isLoggedIn);
-		$("#logged-out").toggle(!isLoggedIn);
-		if (isLoggedIn) {
-			leaderboardTable.insert({
-				groupname: groupName
-			}).then(function (newuser){
-				currentUserId = newuser.id;
-				highestInARow = newuser.highscore;
-				groupName = newuser.groupname;
-				$('#highest-in-a-row').html(highestInARow);
-				if (newuser.username !== "") {
-					$("#login-name").text(newuser.username);
-				   $("#form-username").toggle(false);
-				   
-				} else {
-					$("#form-username").toggle(true);
-					$("#saveusername").click(function(evt) {
-						updateUserName();
-					});
-				}
-				refreshLeaderboard();
-			});
-		}
-	}
+    // Handle Update username
+    function updateUserName() {
+        var newUserName = headsTailsViewModel.newusername();
+        headsTailsViewModel.userName(newUserName);
+        leaderboardTable.update({
+            id: headsTailsViewModel.currentUserId(),
+            highscore: headsTailsViewModel.highestInARow(),
+            groupname: headsTailsViewModel.groupName(),
+            username: headsTailsViewModel.userName()
+        }).then(function (updateduser) {
+            $("#form-username").toggle(false);
+            refreshLeaderboard();
+        });
+    }
 
-	function logIn() {
-		client.login("microsoftaccount").then(refreshAuthDisplay, function(error){
-		alert(error); });
-	}
+    // Handle Login/auth
+    function refreshAuthDisplay() {
+        var isLoggedIn = client.currentUser !== null;
+        $("#logged-in").toggle(isLoggedIn);
+        $("#logged-out").toggle(!isLoggedIn);
+        if (isLoggedIn) {
+            leaderboardTable.insert({
+                groupname: headsTailsViewModel.groupName()
+            }).then(function (newuser) {
+                currentUserId = newuser.id;
+                headsTailsViewModel.highestInARow(newuser.highscore);
+                headsTailsViewModel.groupName(newuser.groupname);
+                if (newuser.username !== "") {
+                    headsTailsViewModel.userName(newuser.username);
+                    $("#form-username").toggle(false);
 
-	function logOut() {
-		client.logout();
-		refreshAuthDisplay();
-		$('#summary').html('<strong>You must login to access data.</strong>');
-	}
+                } else {
+                    $("#form-username").toggle(true);
+                    $("#saveusername").click(function (evt) {
+                        updateUserName();
+                    });
+                }
+                refreshLeaderboard();
+            });
+        }
+    }
+
+    function logIn() {
+        client.login("microsoftaccount").then(refreshAuthDisplay, function (error) {
+            alert(error);
+        });
+    }
+
+    function logOut() {
+        client.logout();
+        refreshAuthDisplay();
+        $('#summary').html('<strong>You must login to access data.</strong>');
+    }
     
 	document.addEventListener("deviceready", onDeviceReady, false);
 
 	function onDeviceReady() {
-	    
+	    ko.applyBindings(headsTailsViewModel);
         refreshAuthDisplay();
         $('#summary').html('<strong>You must login to access data.</strong>');
         $("#logged-out button").click(logIn);

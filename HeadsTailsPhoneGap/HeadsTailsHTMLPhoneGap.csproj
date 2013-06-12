@@ -175,8 +175,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\HeadsTailsHTML\Scripts\knockout-2.2.1.js">
+      <Link>www\Scripts\knockout-2.2.1.js</Link>
+    </Content>
     <Content Include="..\HeadsTailsHTML\Scripts\MobileServices.Web-1.0.0.min.js">
       <Link>www\Scripts\MobileServices.Web-1.0.0.min.js</Link>
+    </Content>
+    <Content Include="..\HeadsTailsHTML\styles.css">
+      <Link>www\css\styles.css</Link>
     </Content>
     <Content Include="www\index.html" />
     <Content Include="www\Scripts\jquery-2.0.1-vsdoc.js" />
@@ -218,9 +224,7 @@
     <Compile Include="Plugins\*" />
     <Compile Include="Plugins\UI\*.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="www\css\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

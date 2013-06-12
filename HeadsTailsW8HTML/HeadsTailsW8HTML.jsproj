@@ -55,6 +55,12 @@
     <AppxManifest Include="package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="..\HeadsTailsHTML\Scripts\knockout-2.2.1.js">
+      <Link>Scripts\knockout-2.2.1.js</Link>
+    </Content>
+    <Content Include="..\HeadsTailsHTML\styles.css">
+      <Link>css\styles.css</Link>
+    </Content>
     <Content Include="..\HeadsTailsPhoneGap\www\app.js">
       <Link>app.js</Link>
     </Content>
