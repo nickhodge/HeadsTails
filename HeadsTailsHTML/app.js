@@ -2,26 +2,30 @@
     var client = new WindowsAzure.MobileServiceClient('https://headstails.azure-mobile.net/', 'UmxHTxsGVDlkQUklKFQhxbOHvVWqRI32'),
         leaderboardTable = client.getTable('leaderboard');
 
-	var highestInARow = 0;	
-	var currentInARow = 0;
-	var groupName = "default";
-	var currentUserId = 0;
+	var headsTailsViewModel = {
+		highestInARow: ko.observable('0'),	
+		currentInARow: ko.observable('0'),
+		groupName: ko.observable('default'),
+		currentUserId: ko.observable(),
+		userName: ko.observable(),
+		leaderBoard: ko.observableArray(),
+		newusername: ko.observable()
+	};
 	
    function refreshLeaderboard() {
         var query = leaderboardTable.orderByDescending('highscore');
-		 
+		headsTailsViewModel.leaderBoard.removeAll();
         query.read().then(function(leaderboard) {
             var leaderboarditems = $.map(leaderboard, function(item) {
-                return $('<li>').html(item.username + '&nbsp;<em> Highscore: '+ item.highscore +'</em>');
+				headsTailsViewModel.leaderBoard.push(item);
             });
-
-            $('#leaderboard-items').empty().append(leaderboarditems).toggle(leaderboarditems.length > 0);
-            $('#summary').html('<strong>' + leaderboarditems.length + '</strong> members in group <strong>' + groupName + '</strong>');
         });
     }
 	
 	function updateLeaderboard () {
-		leaderboardTable.update({id:1 , highscore: highestInARow, groupname: groupName}).then(refreshLeaderboard);
+		leaderboardTable.update({id:1 , 
+		highscore: headsTailsViewModel.highestInARow(), 
+		groupname: headsTailsViewModel.groupName()}).then(refreshLeaderboard);
 	}
 	
 	// Game Mechanics, courtesy George Boole and Claude Shannon
@@ -36,15 +40,13 @@
 	function chooseheads(flip) {
 		var x = Math.random();
 		if ((x < 0.5) && flip) {
-			currentInARow++;
+			headsTailsViewModel.currentInARow(headsTailsViewModel.currentInARow() + 1);
 		} else {
-			currentInARow = 0;
+			headsTailsViewModel.currentInARow(0);
 		}
-		$('#current-in-a-row').html(currentInARow);
-		if (currentInARow > highestInARow) {
+		if (headsTailsViewModel.currentInARow() > headsTailsViewModel.highestInARow()) {
 		//doupdate
-			highestInARow = currentInARow;
-			$('#highest-in-a-row').html(highestInARow);
+			headsTailsViewModel.highestInARow(headsTailsViewModel.currentInARow());
 			updateLeaderboard();
 		}
 	}
@@ -57,10 +59,13 @@
 	
 	// Handle Update username
 	function updateUserName() {
-		var newUserName = $('input[id=newusername]').val();
-		leaderboardTable.update({id:currentUserId , highscore: highestInARow, groupname: groupName, username: newUserName }).then(function(updateduser)
+		var newUserName = headsTailsViewModel.newusername();
+		headsTailsViewModel.userName(newUserName);
+		leaderboardTable.update({id:headsTailsViewModel.currentUserId(),
+		highscore: headsTailsViewModel.highestInARow(), 
+		groupname: headsTailsViewModel.groupName(), 
+		username: headsTailsViewModel.userName() }).then(function(updateduser)
 		{
-			$("#login-name").text(updateduser.username);
 			$("#form-username").toggle(false);
 			refreshLeaderboard();
 		});
@@ -73,14 +78,13 @@
 		$("#logged-out").toggle(!isLoggedIn);
 		if (isLoggedIn) {
 			leaderboardTable.insert({
-				groupname: groupName
+				groupname: headsTailsViewModel.groupName()
 			}).then(function (newuser){
 				currentUserId = newuser.id;
-				highestInARow = newuser.highscore;
-				groupName = newuser.groupname;
-				$('#highest-in-a-row').html(highestInARow);
+				headsTailsViewModel.highestInARow(newuser.highscore);
+				headsTailsViewModel.groupName(newuser.groupname);
 				if (newuser.username !== "") {
-					$("#login-name").text(newuser.username);
+					headsTailsViewModel.userName(newuser.username);
 				   $("#form-username").toggle(false);
 				   
 				} else {
@@ -106,6 +110,7 @@
 	}
 
 	$(function () {
+		ko.applyBindings(headsTailsViewModel);
 		refreshAuthDisplay();
 		$('#summary').html('<strong>You must login to access data.</strong>');          
 		$("#logged-out button").click(logIn);

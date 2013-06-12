@@ -12,13 +12,13 @@
                     <h2>Using Windows Azure Mobile Services</h2>
                 </header>
 
-				<div id="logged-in">You are logged in as <span id="login-name"></span>.<button id="log-out">Log out</button>
+				<div id="logged-in">You are logged in as <span id="login-name" data-bind="text: userName"></span>.<button id="log-out">Log out</button>
 					
-					<form id="form-username"><input id="newusername"></input><div class="fakebutton" id="saveusername" style="width: 100px;">Save User Name</div></form>
+					<form id="form-username"><input id="newusername" data-bind="value: newusername"></input><div class="fakebutton" id="saveusername" style="width: 100px;">Save User Name</div></form>
 					
 					<div id="game">
-						<div>Current In-a-Row <span id="current-in-a-row">0</span></div>
-						<div>Highest In-a-Row <span id="highest-in-a-row">0</span></div>
+						<div>Current In-a-Row <span id="current-in-a-row" data-bind="text: currentInARow"></span></div>
+						<div>Highest In-a-Row <span id="highest-in-a-row" data-bind="text: highestInARow"></span></div>
 						
 						<div class='fakebutton' id='chooseheads'>Pick Heads</div>
 						<div class='fakebutton' id='choosetails'>Pick Tails</div>
@@ -29,7 +29,11 @@
 				
 				<div id="logged-out">You are not logged in.<button>Log in</button></div>
 
-				<ul id='leaderboard-items'></ul>
+				<ul id='leaderboard-items' data-bind="foreach: leaderBoard">
+					<li>
+						<span data-bind="text: username"></span> Highscore:<span data-bind="text: highscore"></span>
+					</li>
+				</ul>
 				<div class='fakebutton' id='leaderboard-refresh'>Refresh</div>
 				<p id='summary'>Loading...</p>
 
@@ -38,6 +42,7 @@
 
         </div>
 
+		<script src='Scripts/knockout-2.2.1.js'></script>
         <script src='Scripts/jquery-2.0.1.min.js'></script>
         <script src='Scripts/MobileServices.Web-1.0.0.min.js'></script>
         <script src='app.js'></script>
