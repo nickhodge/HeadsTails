@@ -1,5 +1,4 @@
 ﻿$(function () {
-
     var client = new WindowsAzure.MobileServiceClient('https://headstails.azure-mobile.net/', 'UmxHTxsGVDlkQUklKFQhxbOHvVWqRI32'),
         leaderboardTable = client.getTable('leaderboard');
 
@@ -10,10 +9,14 @@
         currentUserId: ko.observable(),
         userName: ko.observable(),
         leaderBoard: ko.observableArray(),
-        newusername: ko.observable()
+        newusername: ko.observable(),
+        isLoggedIn: ko.observable(false),
+        isLoggedOut: ko.observable(true),
+        isLoadingData: ko.observable(false)
     };
 
     function refreshLeaderboard() {
+        headsTailsViewModel.isLoadingData(true);
         var query = leaderboardTable.orderByDescending('highscore');
         headsTailsViewModel.leaderBoard.removeAll();
         query.read().then(function (leaderboard) {
@@ -21,17 +24,20 @@
                 headsTailsViewModel.leaderBoard.push(item);
             });
         });
+        headsTailsViewModel.isLoadingData(false);
     }
 
     function updateLeaderboard() {
         leaderboardTable.update({
-            id: 1,
+            id: headsTailsViewModel.currentUserId(),
             highscore: headsTailsViewModel.highestInARow(),
             groupname: headsTailsViewModel.groupName()
         }).then(refreshLeaderboard);
     }
 
     // Game Mechanics, courtesy George Boole and Claude Shannon
+    // and if you do this an infinite number of times, Cantor style
+    // 
     $('#choosetails').submit(function (evt) {
         chooseheads(false);
     });
@@ -77,10 +83,8 @@
 
     // Handle Login/auth
     function refreshAuthDisplay() {
-        var isLoggedIn = client.currentUser !== null;
-        $("#logged-in").toggle(isLoggedIn);
-        $("#logged-out").toggle(!isLoggedIn);
-        if (isLoggedIn) {
+        //headsTailsViewModel.isLoggedIn = client.currentUser !== null;
+        if (headsTailsViewModel.isLoggedIn() === false) {
             leaderboardTable.insert({
                 groupname: headsTailsViewModel.groupName()
             }).then(function (newuser) {
@@ -97,6 +101,8 @@
                         updateUserName();
                     });
                 }
+                headsTailsViewModel.isLoggedIn(true);
+                headsTailsViewModel.isLoggedOut(false);
                 refreshLeaderboard();
             });
         }
@@ -110,17 +116,16 @@
 
     function logOut() {
         client.logout();
+        headsTailsViewModel.isLoggedIn(false);
+        headsTailsViewModel.isLoggedOut(true);
         refreshAuthDisplay();
-        $('#summary').html('<strong>You must login to access data.</strong>');
     }
-    
+
 	document.addEventListener("deviceready", onDeviceReady, false);
 
 	function onDeviceReady() {
 	    ko.applyBindings(headsTailsViewModel);
-        refreshAuthDisplay();
-        $('#summary').html('<strong>You must login to access data.</strong>');
-        $("#logged-out button").click(logIn);
+         $("#logged-out button").click(logIn);
         $("#logged-in button").click(logOut);
         refreshLeaderboard();
     }

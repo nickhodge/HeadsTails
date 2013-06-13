@@ -175,14 +175,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\HeadsTailsHTML\css\styles.css">
+      <Link>www\css\styles.css</Link>
+    </Content>
     <Content Include="..\HeadsTailsHTML\Scripts\knockout-2.2.1.js">
       <Link>www\Scripts\knockout-2.2.1.js</Link>
     </Content>
     <Content Include="..\HeadsTailsHTML\Scripts\MobileServices.Web-1.0.0.min.js">
       <Link>www\Scripts\MobileServices.Web-1.0.0.min.js</Link>
-    </Content>
-    <Content Include="..\HeadsTailsHTML\styles.css">
-      <Link>www\css\styles.css</Link>
     </Content>
     <Content Include="www\index.html" />
     <Content Include="www\Scripts\jquery-2.0.1-vsdoc.js" />
@@ -191,7 +191,6 @@
     <Content Include="www\app.js" />
     <Content Include="www\cordova-2.7.0.js" />
     <Content Include="www\img\logo.png" />
-    <Content Include="www\styles.css" />
     <Content Include="config.xml" />
     <Content Include="Images\**" />
     <Content Include="resources\notification-beep.wav" />

@@ -12,9 +12,9 @@
                     <h2>Using Windows Azure Mobile Services</h2>
                 </header>
 
-				<div id="logged-in">You are logged in as <span id="login-name" data-bind="text: userName"></span>.<button id="log-out">Log out</button>
+				<div id="logged-in" data-bind="visible: isLoggedIn">You are logged in as <span id="login-name" data-bind="    text: userName"></span>.<button id="log-out">Log out</button>
 					
-				    <form id="form-username"><input id="newusername" data-bind="value: newusername"/><div class="fakebutton" id="saveusername" style="width: 100px;">Save User Name</div></form>
+					<form id="form-username"><input id="newusername" data-bind="value: newusername"></input><div class="fakebutton" id="saveusername" style="width: 100px;">Save User Name</div></form>
 					
 					<div id="game">
 						<div>Current In-a-Row <span id="current-in-a-row" data-bind="text: currentInARow"></span></div>
@@ -27,20 +27,21 @@
 				
 				</div>
 				
-				<div id="logged-out">You are not logged in.<button>Log in</button></div>
+				<div id="logged-out" data-bind="visible: isLoggedOut">You are not logged in.<button>Log in</button></div>
 
 				<ul id='leaderboard-items' data-bind="foreach: leaderBoard">
 					<li>
-						<span data-bind="text: username"></span> Highscore:<span data-bind="    text: highscore"></span>
+						<span data-bind="text: username"></span> Highscore:<span data-bind="text: highscore"></span>
 					</li>
 				</ul>
 				<div class='fakebutton' id='leaderboard-refresh'>Refresh</div>
-				<p id='summary'>Loading...</p>
+				<p data-bind="visible: isLoadingData" id='summary'>Loading...</p>
 
 				
             </article>
 
         </div>
+
         <script src="cordova-2.7.0.js"></script>
 		<script src='Scripts/knockout-2.2.1.js'></script>
         <script src='Scripts/jquery-2.0.1.min.js'></script>

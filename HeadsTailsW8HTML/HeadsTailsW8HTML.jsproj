@@ -55,11 +55,11 @@
     <AppxManifest Include="package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="..\HeadsTailsHTML\css\styles.css">
+      <Link>css\styles.css</Link>
+    </Content>
     <Content Include="..\HeadsTailsHTML\Scripts\knockout-2.2.1.js">
       <Link>Scripts\knockout-2.2.1.js</Link>
-    </Content>
-    <Content Include="..\HeadsTailsHTML\styles.css">
-      <Link>css\styles.css</Link>
     </Content>
     <Content Include="..\HeadsTailsPhoneGap\www\app.js">
       <Link>app.js</Link>
@@ -69,9 +69,6 @@
     </Content>
     <Content Include="..\HeadsTailsPhoneGap\www\index.html">
       <Link>index.html</Link>
-    </Content>
-    <Content Include="..\HeadsTailsPhoneGap\www\styles.css">
-      <Link>styles.css</Link>
     </Content>
     <Content Include="cordova-2.7.0.js" />
     <Content Include="images\logo.png" />
