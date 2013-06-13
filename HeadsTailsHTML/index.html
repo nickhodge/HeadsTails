@@ -12,7 +12,7 @@
                     <h2>Using Windows Azure Mobile Services</h2>
                 </header>
 
-				<div id="logged-in">You are logged in as <span id="login-name" data-bind="text: userName"></span>.<button id="log-out">Log out</button>
+				<div id="logged-in" data-bind="visible: isLoggedIn">You are logged in as <span id="login-name" data-bind="    text: userName"></span>.<button id="log-out">Log out</button>
 					
 					<form id="form-username"><input id="newusername" data-bind="value: newusername"></input><div class="fakebutton" id="saveusername" style="width: 100px;">Save User Name</div></form>
 					
@@ -27,7 +27,7 @@
 				
 				</div>
 				
-				<div id="logged-out">You are not logged in.<button>Log in</button></div>
+				<div id="logged-out" data-bind="visible: isLoggedOut">You are not logged in.<button>Log in</button></div>
 
 				<ul id='leaderboard-items' data-bind="foreach: leaderBoard">
 					<li>
@@ -35,7 +35,7 @@
 					</li>
 				</ul>
 				<div class='fakebutton' id='leaderboard-refresh'>Refresh</div>
-				<p id='summary'>Loading...</p>
+				<p data-bind="visible: isLoadingData" id='summary'>Loading...</p>
 
 				
             </article>

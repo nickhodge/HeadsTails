@@ -2,33 +2,40 @@
     var client = new WindowsAzure.MobileServiceClient('https://headstails.azure-mobile.net/', 'UmxHTxsGVDlkQUklKFQhxbOHvVWqRI32'),
         leaderboardTable = client.getTable('leaderboard');
 
-	var headsTailsViewModel = {
-		highestInARow: ko.observable('0'),	
-		currentInARow: ko.observable('0'),
-		groupName: ko.observable('default'),
-		currentUserId: ko.observable(),
-		userName: ko.observable(),
-		leaderBoard: ko.observableArray(),
-		newusername: ko.observable()
-	};
+    var headsTailsViewModel = {
+        highestInARow: ko.observable('0'),
+        currentInARow: ko.observable('0'),
+        groupName: ko.observable('default'),
+        currentUserId: ko.observable(),
+        userName: ko.observable(),
+        leaderBoard: ko.observableArray(),
+        newusername: ko.observable(),
+        isLoggedIn: ko.observable(false),
+        isLoggedOut: ko.observable(true),
+		isLoadingData: ko.observable(false)
+};
 	
    function refreshLeaderboard() {
+		headsTailsViewModel.isLoadingData(true);
         var query = leaderboardTable.orderByDescending('highscore');
 		headsTailsViewModel.leaderBoard.removeAll();
         query.read().then(function(leaderboard) {
-            var leaderboarditems = $.map(leaderboard, function(item) {
+            $.map(leaderboard, function(item) {
 				headsTailsViewModel.leaderBoard.push(item);
             });
         });
-    }
+ 		headsTailsViewModel.isLoadingData(false);
+   }
 	
 	function updateLeaderboard () {
-		leaderboardTable.update({id:1 , 
+		leaderboardTable.update({id:headsTailsViewModel.currentUserId() , 
 		highscore: headsTailsViewModel.highestInARow(), 
 		groupname: headsTailsViewModel.groupName()}).then(refreshLeaderboard);
 	}
 	
 	// Game Mechanics, courtesy George Boole and Claude Shannon
+	// and if you do this an infinite number of times, Cantor style
+	// 
     $('#choosetails').submit(function(evt) {
         chooseheads(false);
     });
@@ -73,10 +80,8 @@
 
 	// Handle Login/auth
 	function refreshAuthDisplay() {
-		var isLoggedIn = client.currentUser !== null;
-		$("#logged-in").toggle(isLoggedIn);
-		$("#logged-out").toggle(!isLoggedIn);
-		if (isLoggedIn) {
+		//headsTailsViewModel.isLoggedIn = client.currentUser !== null;
+		if (headsTailsViewModel.isLoggedIn() === false) {
 			leaderboardTable.insert({
 				groupname: headsTailsViewModel.groupName()
 			}).then(function (newuser){
@@ -93,9 +98,11 @@
 						updateUserName();
 					});
 				}
+				headsTailsViewModel.isLoggedIn(true);
+				headsTailsViewModel.isLoggedOut(false);
 				refreshLeaderboard();
 			});
-		}
+		} 
 	}
 
 	function logIn() {
@@ -105,16 +112,21 @@
 
 	function logOut() {
 		client.logout();
+		headsTailsViewModel.isLoggedIn(false);
+		headsTailsViewModel.isLoggedOut(true);
 		refreshAuthDisplay();
-		$('#summary').html('<strong>You must login to access data.</strong>');
+	}
+
+
+	function startUp() {
+		ko.applyBindings(headsTailsViewModel);
+		// wire the 'buttons' to the methods
+		$("#logged-out button").click(logIn);
+		$("#logged-in button").click(logOut);
+		updateLeaderboard ();	    
 	}
 
 	$(function () {
-		ko.applyBindings(headsTailsViewModel);
-		refreshAuthDisplay();
-		$('#summary').html('<strong>You must login to access data.</strong>');          
-		$("#logged-out button").click(logIn);
-		$("#logged-in button").click(logOut);
-		updateLeaderboard ();
+	    startUp();
 	});
 });
