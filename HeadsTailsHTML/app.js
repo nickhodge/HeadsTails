@@ -3,8 +3,8 @@
         leaderboardTable = client.getTable('leaderboard');
 
     var headsTailsViewModel = {
-        highestInARow: ko.observable('0'),
-        currentInARow: ko.observable('0'),
+        highestInARow: ko.observable(0),
+        currentInARow: ko.observable(0),
         groupName: ko.observable('default'),
         currentUserId: ko.observable(),
         userName: ko.observable(),
