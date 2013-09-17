@@ -115,7 +115,10 @@ namespace HeadsTails
                     liveIdClient.Logout();
 
                 CurrentLoginStatus = "Connecting to Microsoft Services";
-                var result = await liveIdClient.LoginAsync(new[] { "wl.basic" });
+
+                // as per: http://stackoverflow.com/questions/17938828/obtaining-the-users-email-address-from-the-live-sdk
+
+                var result = await liveIdClient.LoginAsync(new[] { "wl.emails" });
                 if (result.Status == LiveConnectSessionStatus.Connected)
                 {
                     CurrentLoginStatus = "Connected to Microsoft Services";
